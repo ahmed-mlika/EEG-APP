@@ -1,0 +1,9 @@
+file_name,prediction,confidence_like,confidence_dislike,delta,theta,alpha,beta,gamma
+Abhishek_1.txt,LIKE,75.0,25.0,1518.043945374524,365.5937438748498,109.47520082273672,60.66650696553019,8.94743865184267
+Abhishek_3.txt,DISLIKE,11.0,89.0,2340.462767243884,450.36100289593605,93.46168418010642,64.20748669996034,24.47738183741857
+Abhishek_3.txt,DISLIKE,11.0,89.0,,,,,
+Abhishek_4.txt,LIKE,88.0,12.0,,,,,
+Abhishek_3.txt,DISLIKE,11.0,89.0,,,,,
+Abhishek_3.txt,DISLIKE,11.0,89.0,,,,,
+Abhishek_1.txt,LIKE,75.0,25.0,,,,,
+Gautam_123_9.txt,LIKE,75.0,25.0,,,,,
