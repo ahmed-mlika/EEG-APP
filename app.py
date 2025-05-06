@@ -191,7 +191,7 @@ elif menu == "Prédiction":
                 for ch in CHANNELS:
                     fig_raw.add_trace(go.Scatter(y=eeg[ch], mode='lines', name=ch))
                 fig_raw.update_layout(
-                    xaxis_title="Temps (échantillons)", 
+                    xaxis_title="Temps (ms)", 
                     yaxis_title="Amplitude (μV)", 
                     height=400
                 )
@@ -203,7 +203,7 @@ elif menu == "Prédiction":
                 for idx, ch in enumerate(CHANNELS):
                     fig_filt.add_trace(go.Scatter(y=eeg_filtered[:, idx], mode='lines', name=ch))
                 fig_filt.update_layout(
-                    xaxis_title="Temps (échantillons)", 
+                    xaxis_title="Temps (ms)", 
                     yaxis_title="Amplitude (μV)", 
                     height=400
                 )
@@ -227,7 +227,7 @@ elif menu == "Prédiction":
                 st.subheader("Canal F3 Brut")
                 fig_f3_raw = px.line(y=f3_raw)
                 fig_f3_raw.update_layout(
-                    xaxis_title="Temps (échantillons)", 
+                    xaxis_title="Temps (ms)", 
                     yaxis_title="Amplitude (μV)", 
                     height=400
                 )
@@ -237,7 +237,7 @@ elif menu == "Prédiction":
                 fig_f3_filt = px.line(y=f3_filt)
                 
                 fig_f3_filt.update_layout(
-                    xaxis_title="Temps (échantillons)", 
+                    xaxis_title="Temps (ms)", 
                     yaxis_title="Amplitude (μV)", 
                     height=400
                 )
@@ -247,7 +247,7 @@ elif menu == "Prédiction":
                 fig_f4_raw = px.line(y=f4_raw)
                 
                 fig_f4_raw.update_layout(
-                    xaxis_title="Temps (échantillons)", 
+                    xaxis_title="Temps (ms)", 
                     yaxis_title="Amplitude (μV)", 
                     height=400
                 )
@@ -257,7 +257,7 @@ elif menu == "Prédiction":
                 fig_f4_filt = px.line(y=f4_filt)
                 
                 fig_f4_filt.update_layout(
-                    xaxis_title="Temps (échantillons)", 
+                    xaxis_title="Temps (ms)", 
                     yaxis_title="Amplitude (μV)", 
                     height=400
                 )
