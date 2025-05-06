@@ -68,23 +68,7 @@ footer {
 </style>
 """, unsafe_allow_html=True)
 
-# === PARTICLES BACKGROUND ===
-components.html("""
-<script src="https://cdn.jsdelivr.net/npm/tsparticles@1/tsparticles.min.js"></script>
-<div id="tsparticles" style="position: fixed; width: 100%; height: 100%; z-index: -1;"></div>
-<script>
-tsParticles.load("tsparticles", {
-  background: { color: { value: "#0e1117" } },
-  particles: {
-    number: { value: 80 },
-    size: { value: 3 },
-    move: { enable: true, speed: 1 },
-    color: { value: "#00ffea" },
-    links: { enable: true, color: "#00ffea" }
-  }
-});
-</script>
-""", height=0)
+
 
 # === CONSTANTS ===
 FS = 250
@@ -133,18 +117,18 @@ def predict_eeg(features):
     confidence = model.predict_proba(features)[0]
     return prediction, confidence
 
-def play_sound():
-    sound_file = "sounds/blop.mp3"
-    if os.path.exists(sound_file):
-        with open(sound_file, "rb") as audio_file:
-            audio_bytes = audio_file.read()
-            b64 = base64.b64encode(audio_bytes).decode()
-            md = f"""
-            <audio autoplay>
-            <source src="data:audio/mp3;base64,{b64}" type="audio/mp3">
-            </audio>
-            """
-            st.markdown(md, unsafe_allow_html=True)
+# def play_sound():
+#     sound_file = "sounds/blop.mp3"
+#     if os.path.exists(sound_file):
+#         with open(sound_file, "rb") as audio_file:
+#             audio_bytes = audio_file.read()
+#             b64 = base64.b64encode(audio_bytes).decode()
+#             md = f"""
+#             <audio autoplay>
+#             <source src="data:audio/mp3;base64,{b64}" type="audio/mp3">
+#             </audio>
+#             """
+#             st.markdown(md, unsafe_allow_html=True)
 
 # === INTERFACE ===
 st.title("🧠 EEG Like/Dislike Classifier")
@@ -199,7 +183,7 @@ elif menu == "Prédiction":
                 st.success(f"Résultat : {label}")
                 st.metric(label="Confiance LIKE", value=f"{confidence_like}%")
                 st.metric(label="Confiance DISLIKE", value=f"{confidence_dislike}%")
-                play_sound()
+                
 
                 # === GRAPHIQUES ===
                 st.subheader("Signal EEG Brut (toutes les électrodes)")
@@ -242,34 +226,70 @@ elif menu == "Prédiction":
 
                 st.subheader("Canal F3 Brut")
                 fig_f3_raw = px.line(y=f3_raw)
+                fig_f3_raw.update_layout(
+                    xaxis_title="Temps (échantillons)", 
+                    yaxis_title="Amplitude (μV)", 
+                    height=400
+                )
                 st.plotly_chart(fig_f3_raw, use_container_width=True)
 
                 st.subheader("Canal F3 Filtré")
                 fig_f3_filt = px.line(y=f3_filt)
+                
+                fig_f3_filt.update_layout(
+                    xaxis_title="Temps (échantillons)", 
+                    yaxis_title="Amplitude (μV)", 
+                    height=400
+                )
                 st.plotly_chart(fig_f3_filt, use_container_width=True)
 
                 st.subheader("Canal F4 Brut")
                 fig_f4_raw = px.line(y=f4_raw)
+                
+                fig_f4_raw.update_layout(
+                    xaxis_title="Temps (échantillons)", 
+                    yaxis_title="Amplitude (μV)", 
+                    height=400
+                )
                 st.plotly_chart(fig_f4_raw, use_container_width=True)
-
+                
                 st.subheader("Canal F4 Filtré")
                 fig_f4_filt = px.line(y=f4_filt)
+                
+                fig_f4_filt.update_layout(
+                    xaxis_title="Temps (échantillons)", 
+                    yaxis_title="Amplitude (μV)", 
+                    height=400
+                )
                 st.plotly_chart(fig_f4_filt, use_container_width=True)
 
                 st.subheader("Spectre de Fréquence - Alpha F3")
                 fig_fft_f3 = px.line(x=freqs_f3, y=fft_f3)
                 fig_fft_f3.update_layout(title="FFT Alpha F3 (8-12 Hz)")
                 fig_fft_f3.update_xaxes(range=[7,13])
+                
+                fig_fft_f3.update_layout(
+                    xaxis_title="Frequence(Hz)", 
+                    yaxis_title="Puissance(μV²)", 
+                    height=400
+                )
                 st.plotly_chart(fig_fft_f3, use_container_width=True)
 
                 st.subheader("Spectre de Fréquence - Alpha F4")
                 fig_fft_f4 = px.line(x=freqs_f4, y=fft_f4)
                 fig_fft_f4.update_layout(title="FFT Alpha F4 (8-12 Hz)")
                 fig_fft_f4.update_xaxes(range=[7,13])
+                
+                fig_fft_f4.update_layout(
+                    xaxis_title="Frequence(Hz)", 
+                    yaxis_title="Puissance(μV²)", 
+                    height=400
+                )
                 st.plotly_chart(fig_fft_f4, use_container_width=True)
-
-                power_f3 = np.trapz(f3_filt)
-                power_f4 = np.trapz(f4_filt)
+                
+                dt = 1 / FS
+                power_f3 = np.trapz(f3_filt ** 2, dx=dt)
+                power_f4 = np.trapz(f4_filt ** 2, dx=dt)
 
                 st.subheader("Comparaison Puissance Alpha F3 vs F4")
                 fig_compare = px.bar(
@@ -277,6 +297,11 @@ elif menu == "Prédiction":
                     y=[power_f3, power_f4],
                     color=["Alpha F3", "Alpha F4"],
                     title="Taux de puissance Alpha"
+                )
+                fig_compare.update_layout(
+                    xaxis_title="Alpha F3,Alpha F4", 
+                    yaxis_title="Puissance(μV²)", 
+                    height=400
                 )
                 st.plotly_chart(fig_compare, use_container_width=True)
 
